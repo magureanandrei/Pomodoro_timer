@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${pageTitle}">Pomodoro Timer</title>
+</head>
+<body>
+<h1 th:text="${pageTitle}">Default Title</h1>
+<p>Welcome to the Pomodoro Timer Application</p>
+<div th:if="${message}" style="color: green; font-weight: bold;">
+    <p th:text="${message}"></p>
+</div>
+<p><a href="/login">Login</a></p>
+</body>
+</html>
