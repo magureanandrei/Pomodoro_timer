@@ -2,10 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Pomodoro Timer</title>
 </head>
 <body>
-<p>here would be the timer part and settings and history</p>
-<a href="/logout">Logout</a>
+<p>Time remaining: <span id="timer">--:--</span></p>
+<button id="startButton">Start</button>
+<button id="pauseButton" disabled>Pause</button>
+<button id="restartButton">Restart</button>
+
+<script>
+    let timerInterval;
+    let remainingTime = [[${session.workDuration ?: 25}]] * 60000; // Work duration in milliseconds
+    let endTime;
+
+    function updateTimer() {
+        const now = Date.now();
+        const diff = endTime - now;
+
+        if (diff <= 0) {
+            document.getElementById("timer").innerText = "00:00";
+            clearInterval(timerInterval);
+            document.getElementById("pauseButton").disabled = true;
+            return;
+        }
+
+        const minutes = Math.floor(diff / 60000);
+        const seconds = Math.floor((diff % 60000) / 1000);
+
+        document.getElementById("timer").innerText =
+            String(minutes).padStart(2, '0') + ":" + String(seconds).padStart(2, '0');
+    }
+
+    document.getElementById("startButton").addEventListener("click", () => {
+        endTime = Date.now() + remainingTime;
+        timerInterval = setInterval(updateTimer, 1000);
+        updateTimer();
+        document.getElementById("startButton").disabled = true;
+        document.getElementById("pauseButton").disabled = false;
+    });
+
+    document.getElementById("pauseButton").addEventListener("click", () => {
+        clearInterval(timerInterval);
+        remainingTime = endTime - Date.now();
+        document.getElementById("startButton").disabled = false;
+        document.getElementById("pauseButton").disabled = true;
+    });
+
+    document.getElementById("restartButton").addEventListener("click", () => {
+        clearInterval(timerInterval);
+        remainingTime = [[${session.workDuration ?: 25}]] * 60000; // Reset to work duration
+        document.getElementById("timer").innerText = String(remainingTime / 60000).padStart(2, '0') + ":00";
+        document.getElementById("startButton").disabled = false;
+        document.getElementById("pauseButton").disabled = true;
+    });
+</script>
+<a href="/settings">Settings</a>
+<a href="/history">History</a>
 </body>
 </html>

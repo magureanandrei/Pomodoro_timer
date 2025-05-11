@@ -75,20 +75,5 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/pomodoro")
-    public String showPomodoroPage(HttpSession session) {
-        User user = (User) session.getAttribute("user");
-        if (user == null) {
-            return "redirect:/login";
-        }
-        return "pomodoro";
-    }
-
-    @GetMapping("/logout")
-    public String logout(HttpSession session) {
-        session.invalidate();
-        return "redirect:/?logout=true";
-    }
-
 
 }
